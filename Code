@@ -1,23 +1,15 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# -------------------------------
-# Step 1: Ask user for number of alternatives and criteria
-# -------------------------------
+#First ask for number of alternatives and criteria
 num_alternatives = int(input("Enter the number of alternatives: "))
 criteria = input("Enter criteria names separated by commas (e.g. Cost,Quality,Reliability,Sustainability): ").split(',')
-
-# -------------------------------
-# Step 2: Ask user for the type of each criterion (higher is better or lower is better)
-# -------------------------------
+#Second ask for the type of criteria( higher or lower better?)
 criteria_type = {}
 for c in criteria:
     resp = input(f"Is higher value better for {c}? (yes/no): ").strip().lower()
     criteria_type[c] = True if resp == "yes" else False
-
-# -------------------------------
-# Step 3: Ask user to input data for each alternative
-# -------------------------------
+#Now insert data for each alternative
 alternatives = []
 data = {c: [] for c in criteria}
 
@@ -31,9 +23,7 @@ for i in range(num_alternatives):
 df = pd.DataFrame(data)
 df.insert(0, "Alternative", alternatives)
 
-# -------------------------------
-# Step 4: Ask user for weights of each criterion
-# -------------------------------
+#Ask for weights
 weights = {}
 total_weight = 0
 for c in criteria:
@@ -45,9 +35,7 @@ for c in criteria:
 if abs(total_weight - 1) > 0.01:
     print("Warning: Total weights do not sum to 1. Please adjust.")
     
-# -------------------------------
-# Step 5: Normalize data
-# -------------------------------
+#Data normalization
 normalized_df = df.copy()
 for c in criteria:
     if not criteria_type[c]:
@@ -56,30 +44,19 @@ for c in criteria:
     # Scale between 0 and 1
     normalized_df[c] = normalized_df[c] / normalized_df[c].max()
 
-# -------------------------------
-# Step 6: Calculate total score
-# -------------------------------
+
 df["Score"] = 0
 for c, w in weights.items():
     df["Score"] += normalized_df[c] * w
 
-# -------------------------------
-# Step 7: Sort alternatives by score
-# -------------------------------
 df_sorted = df.sort_values(by="Score", ascending=False)
 
-# -------------------------------
-# Step 8: Display ranking
-# -------------------------------
 print("\nRanking of alternatives:")
 print(df_sorted[["Alternative", "Score"]])
 
 print("\nRecommended option:")
 print(df_sorted.iloc[0]["Alternative"])
 
-# -------------------------------
-# Step 9: Optional - plot ranking
-# -------------------------------
 plt.figure(figsize=(8, 5))
 plt.bar(df_sorted["Alternative"], df_sorted["Score"], color='skyblue')
 plt.xlabel("Alternative")
