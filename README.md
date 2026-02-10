@@ -24,9 +24,22 @@ The tool demonstrates **analytical thinking, data-driven decision making, scenar
 
 ---
 
-## How to run
-### Option A: interactive mode
-1. Download the repo
-2. Create a virtual environment and install dependencies
-3. Run:
-   python -m decision_tool.cli
+## How to run (local)
+
+### 1) Install
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+```
+### 2) Run (interactive)
+```bash
+python -m decision_tool.cli
+```
+## Project structure
+
+- `src/decision_tool/core.py` — scoring, normalization and ranking logic  
+- `src/decision_tool/cli.py` — interactive command-line interface  
+- `tests/` — unit tests for the core logic
+  ## Requirements
+- Python 3.10+
