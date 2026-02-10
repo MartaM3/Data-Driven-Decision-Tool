@@ -1,0 +1,16 @@
+[project]
+name = "decision-tool"
+version = "0.1.0"
+description = "Data-driven multi-criteria decision tool"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
