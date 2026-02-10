@@ -23,3 +23,10 @@ The tool demonstrates **analytical thinking, data-driven decision making, scenar
 - Visualizes results using a simple **bar chart**.
 
 ---
+
+## How to run
+### Option A: interactive mode
+1. Download the repo
+2. Create a virtual environment and install dependencies
+3. Run:
+   python -m decision_tool.cli
