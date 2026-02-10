@@ -1,4 +1,7 @@
-from __future__ import annotations
+
+
+      
+  from __future__ import annotations
 
 from typing import Dict, List
 
@@ -6,6 +9,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from decision_tool.core import score_and_rank
+
+# Set to False if you don't want to show the plot window
+PLOT = True
 
 
 def ask_int(prompt: str) -> int:
@@ -34,8 +40,16 @@ def ask_yes_no(prompt: str) -> bool:
         print("Please answer 'yes' or 'no'.")
 
 
+def build_dataframe(criteria: List[str], alternatives: List[str], data: Dict[str, List[float]]) -> pd.DataFrame:
+    df = pd.DataFrame(data)
+    df.insert(0, "Alternative", alternatives)
+    return df
+
+
 def main() -> None:
     num_alternatives = ask_int("Enter the number of alternatives: ")
+    while num_alternatives <= 0:
+        num_alternatives = ask_int("Please enter a positive number of alternatives: ")
 
     criteria = input(
         "Enter criteria names separated by commas (e.g. Cost,Quality,Reliability,Sustainability): "
@@ -50,23 +64,27 @@ def main() -> None:
         criteria_type[c] = ask_yes_no(f"Is higher value better for {c}? (yes/no): ")
 
     alternatives: List[str] = []
-    data = {c: [] for c in criteria}
+    data: Dict[str, List[float]] = {c: [] for c in criteria}
 
     for i in range(num_alternatives):
         name = input(f"Enter name of alternative {i+1}: ").strip()
+        while not name or name in alternatives:
+            name = input("Please enter a unique, non-empty name: ").strip()
         alternatives.append(name)
 
         for c in criteria:
             value = ask_float(f"Enter {c} value for {name}: ")
             data[c].append(value)
 
-    df = pd.DataFrame(data)
-    df.insert(0, "Alternative", alternatives)
+    df = build_dataframe(criteria, alternatives, data)
 
     weights: Dict[str, float] = {}
     print("\nEnter weights for each criterion. They must sum to 1.\n")
     for c in criteria:
-        weights[c] = ask_float(f"Enter weight for {c} (0-1): ")
+        w = ask_float(f"Enter weight for {c} (0-1): ")
+        while w < 0 or w > 1:
+            w = ask_float("Please enter a weight between 0 and 1: ")
+        weights[c] = w
 
     # Compute ranking (core logic)
     try:
@@ -83,14 +101,14 @@ def main() -> None:
     print("\nRecommended option:")
     print(result.recommended)
 
-    # Plot
-    plt.figure(figsize=(8, 5))
-    plt.bar(ranked["Alternative"], ranked["Score"])
-    plt.xlabel("Alternative")
-    plt.ylabel("Score")
-    plt.title("Ranking of Alternatives")
-    plt.tight_layout()
-    plt.show()
+    if PLOT:
+        plt.figure(figsize=(8, 5))
+        plt.bar(ranked["Alternative"], ranked["Score"])
+        plt.xlabel("Alternative")
+        plt.ylabel("Score")
+        plt.title("Ranking of Alternatives")
+        plt.tight_layout()
+        plt.show()
 
 
 if __name__ == "__main__":
