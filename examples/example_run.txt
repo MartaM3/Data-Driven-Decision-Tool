@@ -1,0 +1,12 @@
+Example criteria: Cost, Quality
+Cost: lower is better
+Quality: higher is better
+
+Alternatives:
+A: Cost=10, Quality=7
+B: Cost=14, Quality=9
+C: Cost=9, Quality=6
+
+Weights:
+Cost=0.5
+Quality=0.5
