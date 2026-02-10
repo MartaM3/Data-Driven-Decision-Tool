@@ -1,16 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "decision-tool"
 version = "0.1.0"
 description = "Data-driven multi-criteria decision tool"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+  "pandas",
+  "matplotlib",
+]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff"]
+dev = [
+  "pytest",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
-
-[tool.ruff]
-line-length = 100
